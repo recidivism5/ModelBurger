@@ -43,7 +43,7 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
                 .SampleDesc.Quality = 0,
 
                 .BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
-                .BufferCount = 1,
+                .BufferCount = 2,
 
                 .OutputWindow = hwnd,
                 .Windowed = TRUE,
