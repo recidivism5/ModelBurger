@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <dwmapi.h>
 
 //local includes:
 #include <error.h>
@@ -25,6 +26,12 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     switch(msg)
     {
         case WM_CREATE:{
+            DWORD darkTitlebar = 1;
+            int DwmwaUseImmersiveDarkMode = 20,
+                DwmwaUseImmersiveDarkModeBefore20h1 = 19;
+            SUCCEEDED(DwmSetWindowAttribute(hwnd, DwmwaUseImmersiveDarkMode, &darkTitlebar, sizeof(darkTitlebar))) ||
+                SUCCEEDED(DwmSetWindowAttribute(hwnd, DwmwaUseImmersiveDarkModeBefore20h1, &darkTitlebar, sizeof(darkTitlebar)));
+
             UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #if defined(DEBUG_BUILD)
             creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
