@@ -32,6 +32,10 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
             SUCCEEDED(DwmSetWindowAttribute(hwnd, DwmwaUseImmersiveDarkMode, &darkTitlebar, sizeof(darkTitlebar))) ||
                 SUCCEEDED(DwmSetWindowAttribute(hwnd, DwmwaUseImmersiveDarkModeBefore20h1, &darkTitlebar, sizeof(darkTitlebar)));
 
+            RECT wr;
+            GetWindowRect(hwnd,&wr);
+            SetWindowPos(hwnd,0,wr.left,wr.top,wr.right-wr.left,wr.bottom-wr.top,SWP_FRAMECHANGED|SWP_NOMOVE|SWP_NOSIZE); //prevent initial white frame
+
             UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #if defined(DEBUG_BUILD)
             creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -140,7 +144,7 @@ int main(int argc, char **argv){
     HWND hwnd = CreateWindowExW(
         WS_EX_OVERLAPPEDWINDOW,
         wcex.lpszClassName,
-        L"Game",
+        L"Bruh Modeler",
         WS_OVERLAPPEDWINDOW | WS_VISIBLE,
         GetSystemMetrics(SM_CXSCREEN)/2-initialWidth/2,
         GetSystemMetrics(SM_CYSCREEN)/2-initialHeight/2,
