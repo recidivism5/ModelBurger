@@ -97,6 +97,9 @@
       <AdditionalDependencies>dxguid.lib;d3d11.lib;d3dcompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -118,6 +121,9 @@
       <AdditionalDependencies>dxguid.lib;d3d11.lib;d3dcompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -134,6 +140,9 @@
       <AdditionalDependencies>dxguid.lib;d3d11.lib;d3dcompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -155,22 +164,29 @@
       <AdditionalDependencies>dxguid.lib;d3d11.lib;d3dcompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="linmath.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="matrixstack.c" />
+    <ClCompile Include="src\error.c" />
+    <ClCompile Include="src\globals.c" />
+    <ClCompile Include="src\linmath.c" />
+    <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\matrixstack.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="linmath.h" />
-    <ClInclude Include="matrixstack.h" />
-    <ClInclude Include="res.h" />
+    <ClInclude Include="include\error.h" />
+    <ClInclude Include="include\globals.h" />
+    <ClInclude Include="include\linmath.h" />
+    <ClInclude Include="include\matrixstack.h" />
+    <ClInclude Include="include\res.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="res.rc" />
+    <ResourceCompile Include="src\res.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon.ico" />
+    <Image Include="src\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

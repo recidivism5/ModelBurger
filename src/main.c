@@ -1,73 +1,8 @@
-//standard library includes:
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <time.h>
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <intrin.h>
-
-//windows includes:
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#define UNICODE
-#define COBJMACROS
-#include <windows.h>
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include <dwmapi.h>
-
 //local includes:
-#include "res.h"
-
-void FatalErrorA(char *format, ...){
-	va_list args;
-	va_start(args,format);
-	static char msg[1024];
-	vsprintf(msg,format,args);
-#if _DEBUG
-	OutputDebugStringA(msg);
-	__debugbreak();
-#else
-	MessageBoxA(0,msg,"Error",MB_ICONERROR);
-#endif
-	va_end(args);
-	exit(1);
-}
-void FatalErrorW(WCHAR *format, ...){
-	va_list args;
-	va_start(args,format);
-	static WCHAR msg[1024];
-	vswprintf(msg,ARRAYSIZE(msg),format,args);
-#if _DEBUG
-	OutputDebugStringW(msg);
-	__debugbreak();
-#else
-	MessageBoxW(0,msg,L"Error",MB_ICONERROR);
-#endif
-	va_end(args);
-	exit(1);
-}
-#define FILENAME (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
-#if _DEBUG
-#define ASSERT(cnd)\
-	do {\
-		if (!(cnd)){\
-			__debugbreak();\
-			exit(1);\
-		}\
-	} while (0)
-#else
-#define ASSERT(cnd)\
-	do {\
-		if (!(cnd)){\
-			FatalErrorA(FILENAME,__LINE__,#cnd);\
-			exit(1);\
-		}\
-	} while (0)
-#endif
+#include <globals.h>
+#include <res.h>
+#include <error.h>
+#include <matrixstack.h>
 
 void *MallocOrDie(size_t size){
 	void *p = malloc(size);
@@ -213,7 +148,7 @@ int main(int argc, char **argv){
 	LONG initialWidth = initialRect.right - initialRect.left;
 	LONG initialHeight = initialRect.bottom - initialRect.top;
 
-	HWND hwnd = CreateWindowExW(
+	gwnd = CreateWindowExW(
 		0, //WS_EX_OVERLAPPEDWINDOW fucks up the borders when maximized
 		wcex.lpszClassName,
 		wcex.lpszClassName,
@@ -223,7 +158,7 @@ int main(int argc, char **argv){
 		initialWidth, 
 		initialHeight,
 		0, 0, wcex.hInstance, 0);
-	ASSERT(hwnd);
+	ASSERT(gwnd);
 
 	MSG msg;
 	while (GetMessageW(&msg,0,0,0)){

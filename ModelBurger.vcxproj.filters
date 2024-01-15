@@ -15,34 +15,46 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
+    <ClCompile Include="src\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="linmath.c">
+    <ClCompile Include="src\linmath.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="matrixstack.c">
+    <ClCompile Include="src\matrixstack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\error.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\globals.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="res.h">
+    <ClInclude Include="include\res.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="linmath.h">
+    <ClInclude Include="include\linmath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="matrixstack.h">
+    <ClInclude Include="include\matrixstack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="res.rc">
+    <ResourceCompile Include="src\res.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon.ico">
+    <Image Include="src\icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

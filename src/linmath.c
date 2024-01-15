@@ -1,4 +1,4 @@
-#include "linmath.h"
+#include <linmath.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -87,10 +87,10 @@ void vec3_lerp(vec3 a, vec3 b, float t, vec3 dst){
 
 void euler_wrap(vec3 e, vec3 dst){
 	for (int i = 0; i < 3; i++){
-		if (e[i] > 4.0f*M_PI){
-			dst[i] = e[i] - 4.0f*M_PI;
-		} else if (e[i] < -4.0f*M_PI){
-			dst[i] = e[i] + 4.0f*M_PI;
+		if (e[i] > 4.0f*(float)M_PI){
+			dst[i] = e[i] - 4.0f*(float)M_PI;
+		} else if (e[i] < -4.0f*(float)M_PI){
+			dst[i] = e[i] + 4.0f*(float)M_PI;
 		}
 	}
 }

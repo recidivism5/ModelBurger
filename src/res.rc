@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "res.h"
+#include <res.h>
 
 RID_ICON ICON "icon.ico"
 

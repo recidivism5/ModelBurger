@@ -1,0 +1,23 @@
+#pragma once
+
+//standard library includes:
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <time.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+//windows includes:
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#define UNICODE
+#define COBJMACROS
+#include <windows.h>
+#include <d3d11.h>
+#include <d3dcompiler.h>
+#include <dwmapi.h>
+
+extern HWND gwnd;
