@@ -1,12 +1,12 @@
 #include <error.h>
 
 void FatalErrorA(char *format, ...){
-	ValidateRect(gwnd,0);
+	ValidateRect(gwnd,0); //the messagebox doesn't work unless we stop the window from trying to paint itself
 
 	va_list args;
 	va_start(args,format);
 	static char msg[1024];
-	vsprintf(msg,format,args);
+	vsnprintf(msg,ARRAYSIZE(msg),format,args);
 #if _DEBUG
 	OutputDebugStringA(msg);
 	__debugbreak();
@@ -18,7 +18,7 @@ void FatalErrorA(char *format, ...){
 }
 
 void FatalErrorW(WCHAR *format, ...){
-	ValidateRect(gwnd,0);
+	ValidateRect(gwnd,0); //the messagebox doesn't work unless we stop the window from trying to paint itself
 
 	va_list args;
 	va_start(args,format);
