@@ -21,3 +21,9 @@
 #include <dwmapi.h>
 
 extern HWND gwnd;
+
+extern IDXGISwapChain *swapChain;
+extern ID3D11Device *device;
+extern ID3D11DeviceContext *deviceContext;
+extern ID3D11RenderTargetView *renderTargetView;
+extern ID3D11DepthStencilView *depthStencilView;

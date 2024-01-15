@@ -20,12 +20,6 @@ void *ReallocOrDie(void *ptr, size_t size){
 	return p;
 }
 
-IDXGISwapChain *swapChain;
-ID3D11Device *device;
-ID3D11DeviceContext *deviceContext;
-ID3D11RenderTargetView *renderTargetView;
-ID3D11DepthStencilView *depthStencilView;
-
 void CreateRenderTargets(){
 	ID3D11Texture2D *backBuffer;
 	ASSERT(SUCCEEDED(swapChain->lpVtbl->GetBuffer(swapChain, 0, &IID_ID3D11Texture2D, (void**)&backBuffer)));
