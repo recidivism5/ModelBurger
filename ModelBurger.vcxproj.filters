@@ -18,9 +18,21 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="linmath.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matrixstack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="res.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linmath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="matrixstack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

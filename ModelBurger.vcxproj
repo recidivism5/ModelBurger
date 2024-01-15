@@ -157,9 +157,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="linmath.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="matrixstack.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="linmath.h" />
+    <ClInclude Include="matrixstack.h" />
     <ClInclude Include="res.h" />
   </ItemGroup>
   <ItemGroup>
