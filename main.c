@@ -1,5 +1,13 @@
 //standard library includes:
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
+#include <time.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <intrin.h>
 
 //windows includes:
 #define WIN32_LEAN_AND_MEAN
@@ -12,7 +20,70 @@
 #include <dwmapi.h>
 
 //local includes:
-#include <error.h>
+#include "res.h"
+
+void FatalErrorA(char *format, ...){
+	va_list args;
+	va_start(args,format);
+	static char msg[1024];
+	vsprintf(msg,format,args);
+#if _DEBUG
+	OutputDebugStringA(msg);
+	__debugbreak();
+#else
+	MessageBoxA(0,msg,"Error",MB_ICONERROR);
+#endif
+	va_end(args);
+	exit(1);
+}
+void FatalErrorW(WCHAR *format, ...){
+	va_list args;
+	va_start(args,format);
+	static WCHAR msg[1024];
+	vswprintf(msg,ARRAYSIZE(msg),format,args);
+#if _DEBUG
+	OutputDebugStringW(msg);
+	__debugbreak();
+#else
+	MessageBoxW(0,msg,L"Error",MB_ICONERROR);
+#endif
+	va_end(args);
+	exit(1);
+}
+#define FILENAME (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
+#if _DEBUG
+#define ASSERT(cnd)\
+	do {\
+		if (!(cnd)){\
+			__debugbreak();\
+			exit(1);\
+		}\
+	} while (0)
+#else
+#define ASSERT(cnd)\
+	do {\
+		if (!(cnd)){\
+			FatalErrorA(FILENAME,__LINE__,#cnd);\
+			exit(1);\
+		}\
+	} while (0)
+#endif
+
+void *MallocOrDie(size_t size){
+	void *p = malloc(size);
+	ASSERT(p);
+	return p;
+}
+void *ZallocOrDie(size_t size){
+	void *p = calloc(1,size);
+	ASSERT(p);
+	return p;
+}
+void *ReallocOrDie(void *ptr, size_t size){
+	void *p = realloc(ptr,size);
+	ASSERT(p);
+	return p;
+}
 
 IDXGISwapChain *swapChain;
 ID3D11Device *device;
@@ -127,10 +198,10 @@ int main(int argc, char **argv){
 		.style = CS_HREDRAW | CS_VREDRAW,
 		.lpfnWndProc = WndProc,
 		.hInstance = GetModuleHandleW(0),
-		.hIcon = LoadIconW(0,IDI_APPLICATION),
+		.hIcon = LoadIconW(GetModuleHandleW(0),MAKEINTRESOURCEW(RID_ICON)),
 		.hCursor = LoadCursorW(0,IDC_ARROW),
 		.lpszClassName = L"Bruh Modeler",
-		.hIconSm = LoadIconW(0,IDI_APPLICATION)
+		.hIconSm = 0,
 	};
 	ASSERT(RegisterClassExW(&wcex));
 
