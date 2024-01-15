@@ -20,11 +20,29 @@ ID3D11DeviceContext *deviceContext;
 ID3D11RenderTargetView *renderTargetView;
 ID3D11DepthStencilView *depthStencilView;
 
-LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-{
-	LRESULT result = 0;
-	switch(msg)
-	{
+void CreateRenderTargets(){
+	ID3D11Texture2D *backBuffer;
+	ASSERT(SUCCEEDED(swapChain->lpVtbl->GetBuffer(swapChain, 0, &IID_ID3D11Texture2D, (void**)&backBuffer)));
+	ASSERT(SUCCEEDED(device->lpVtbl->CreateRenderTargetView(device, (ID3D11Resource *)backBuffer, 0, &renderTargetView)));
+
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	backBuffer->lpVtbl->GetDesc(backBuffer, &depthStencilDesc);
+
+	backBuffer->lpVtbl->Release(backBuffer);
+
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	ID3D11Texture2D* depthStencil;
+
+	device->lpVtbl->CreateTexture2D(device, &depthStencilDesc, 0, &depthStencil);
+	device->lpVtbl->CreateDepthStencilView(device, (ID3D11Resource *)depthStencil, 0, &depthStencilView);
+
+	depthStencil->lpVtbl->Release(depthStencil);
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
+	switch(msg){
 		case WM_CREATE:{
 			DWORD darkTitlebar = 1;
 			int DwmwaUseImmersiveDarkMode = 20,
@@ -76,24 +94,7 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 				&deviceContext
 			)));
 
-			ID3D11Texture2D *backBuffer;
-			ASSERT(SUCCEEDED(swapChain->lpVtbl->GetBuffer(swapChain, 0, &IID_ID3D11Texture2D, (void**)&backBuffer)));
-			ASSERT(SUCCEEDED(device->lpVtbl->CreateRenderTargetView(device, (ID3D11Resource *)backBuffer, 0, &renderTargetView)));
-
-			D3D11_TEXTURE2D_DESC depthStencilDesc;
-			backBuffer->lpVtbl->GetDesc(backBuffer, &depthStencilDesc);
-
-			backBuffer->lpVtbl->Release(backBuffer);
-
-			depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-			depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-
-			ID3D11Texture2D* depthStencil;
-
-			device->lpVtbl->CreateTexture2D(device, &depthStencilDesc, 0, &depthStencil);
-			device->lpVtbl->CreateDepthStencilView(device, (ID3D11Resource *)depthStencil, 0, &depthStencilView);
-
-			depthStencil->lpVtbl->Release(depthStencil);
+			CreateRenderTargets();
 			break;
 		}
 		case WM_PAINT:{
@@ -104,37 +105,31 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			swapChain->lpVtbl->Present(swapChain, 1, 0);
 			return 0;
 		}
-		case WM_DESTROY:
-		{
+		case WM_DESTROY:{
 			PostQuitMessage(0);
 			break;
 		}
-		case WM_SIZE:
-		{
+		case WM_SIZE:{
 			deviceContext->lpVtbl->OMSetRenderTargets(deviceContext,0,0,0);
 			renderTargetView->lpVtbl->Release(renderTargetView);
+			depthStencilView->lpVtbl->Release(depthStencilView);
 			ASSERT(SUCCEEDED(swapChain->lpVtbl->ResizeBuffers(swapChain,0,0,0,DXGI_FORMAT_UNKNOWN,0)));
-			ID3D11Texture2D *frameBuffer;
-			ASSERT(SUCCEEDED(swapChain->lpVtbl->GetBuffer(swapChain,0,&IID_ID3D11Texture2D,(void **)&frameBuffer)));
-			ASSERT(SUCCEEDED(device->lpVtbl->CreateRenderTargetView(device,(ID3D11Resource *)frameBuffer,0,&renderTargetView)));
-			frameBuffer->lpVtbl->Release(frameBuffer);
+			CreateRenderTargets();
 			break;
 		}
-		default:
-			result = DefWindowProcW(hwnd, msg, wparam, lparam);
 	}
-	return result;
+	return DefWindowProcW(hwnd, msg, wparam, lparam);
 }
 
 int main(int argc, char **argv){
 	WNDCLASSEXW wcex = {
 		.cbSize = sizeof(wcex),
 		.style = CS_HREDRAW | CS_VREDRAW,
-		.lpfnWndProc = wndProc,
+		.lpfnWndProc = WndProc,
 		.hInstance = GetModuleHandleW(0),
 		.hIcon = LoadIconW(0,IDI_APPLICATION),
 		.hCursor = LoadCursorW(0,IDC_ARROW),
-		.lpszClassName = L"box_engine",
+		.lpszClassName = L"Bruh Modeler",
 		.hIconSm = LoadIconW(0,IDI_APPLICATION)
 	};
 	ASSERT(RegisterClassExW(&wcex));
@@ -143,14 +138,14 @@ int main(int argc, char **argv){
 	int height = 480;
 
 	RECT initialRect = {0, 0, width, height};
-	AdjustWindowRectEx(&initialRect, WS_OVERLAPPEDWINDOW, FALSE, WS_EX_OVERLAPPEDWINDOW);
+	AdjustWindowRect(&initialRect,WS_OVERLAPPEDWINDOW,FALSE);
 	LONG initialWidth = initialRect.right - initialRect.left;
 	LONG initialHeight = initialRect.bottom - initialRect.top;
 
 	HWND hwnd = CreateWindowExW(
-		WS_EX_OVERLAPPEDWINDOW,
+		0, //WS_EX_OVERLAPPEDWINDOW fucks up the borders when maximized
 		wcex.lpszClassName,
-		L"Bruh Modeler",
+		wcex.lpszClassName,
 		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 		GetSystemMetrics(SM_CXSCREEN)/2-initialWidth/2,
 		GetSystemMetrics(SM_CYSCREEN)/2-initialHeight/2,
@@ -160,9 +155,9 @@ int main(int argc, char **argv){
 	ASSERT(hwnd);
 
 	MSG msg;
-	while (GetMessageA(&msg,0,0,0)){
+	while (GetMessageW(&msg,0,0,0)){
 		TranslateMessage(&msg);
-		DispatchMessageA(&msg);
+		DispatchMessageW(&msg);
 	}
 
 	return 0;
