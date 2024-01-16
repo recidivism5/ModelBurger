@@ -3,6 +3,7 @@
 #include <res.h>
 #include <error.h>
 #include <matrixstack.h>
+#include <dwritewrapper.h>
 
 void *MallocOrDie(size_t size){
 	void *p = malloc(size);
@@ -21,12 +22,15 @@ void *ReallocOrDie(void *ptr, size_t size){
 }
 
 void CreateRenderTargets(){
-	ID3D11Texture2D *backBuffer;
+	ID3D11Texture2D *backBuffer = 0;
 	ASSERT(SUCCEEDED(swapChain->lpVtbl->GetBuffer(swapChain, 0, &IID_ID3D11Texture2D, (void**)&backBuffer)));
+
 	ASSERT(SUCCEEDED(device->lpVtbl->CreateRenderTargetView(device, (ID3D11Resource *)backBuffer, 0, &renderTargetView)));
 
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 	backBuffer->lpVtbl->GetDesc(backBuffer, &depthStencilDesc);
+
+	DwriteConnectTexture(backBuffer);
 
 	backBuffer->lpVtbl->Release(backBuffer);
 
@@ -35,8 +39,8 @@ void CreateRenderTargets(){
 
 	ID3D11Texture2D* depthStencil;
 
-	device->lpVtbl->CreateTexture2D(device, &depthStencilDesc, 0, &depthStencil);
-	device->lpVtbl->CreateDepthStencilView(device, (ID3D11Resource *)depthStencil, 0, &depthStencilView);
+	ASSERT(SUCCEEDED(device->lpVtbl->CreateTexture2D(device, &depthStencilDesc, 0, &depthStencil)));
+	ASSERT(SUCCEEDED(device->lpVtbl->CreateDepthStencilView(device, (ID3D11Resource *)depthStencil, 0, &depthStencilView)));
 
 	depthStencil->lpVtbl->Release(depthStencil);
 }
@@ -64,7 +68,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 				.BufferDesc.Height = 0,
 				.BufferDesc.RefreshRate.Numerator = 0,
 				.BufferDesc.RefreshRate.Denominator = 0,
-				.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM,
+				.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM,
 				.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
 				.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED,
 
@@ -94,6 +98,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 				&deviceContext
 			)));
 
+			DwriteInit();
+
 			CreateRenderTargets();
 			break;
 		}
@@ -102,6 +108,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 			FLOAT clearColor[4] = {0.1f, 0.2f, 0.6f, 1.0f};
 			deviceContext->lpVtbl->ClearRenderTargetView(deviceContext, renderTargetView, clearColor);
 			deviceContext->lpVtbl->ClearDepthStencilView(deviceContext, depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+			DwriteBegin();
+
+			DwriteDrawText(L"Bruh",0,0);
+
+			DwriteEnd();
+
 			swapChain->lpVtbl->Present(swapChain, 1, 0);
 			return 0;
 		}
@@ -111,6 +124,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 		}
 		case WM_SIZE:{
 			deviceContext->lpVtbl->OMSetRenderTargets(deviceContext,0,0,0);
+			DwriteReleaseTexture();
 			renderTargetView->lpVtbl->Release(renderTargetView);
 			depthStencilView->lpVtbl->Release(depthStencilView);
 			ASSERT(SUCCEEDED(swapChain->lpVtbl->ResizeBuffers(swapChain,0,0,0,DXGI_FORMAT_UNKNOWN,0)));

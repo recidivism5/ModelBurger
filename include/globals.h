@@ -20,6 +20,10 @@
 #include <d3dcompiler.h>
 #include <dwmapi.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern HWND gwnd;
 
 extern IDXGISwapChain *swapChain;
@@ -27,3 +31,7 @@ extern ID3D11Device *device;
 extern ID3D11DeviceContext *deviceContext;
 extern ID3D11RenderTargetView *renderTargetView;
 extern ID3D11DepthStencilView *depthStencilView;
+
+#ifdef __cplusplus
+}
+#endif

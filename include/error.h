@@ -2,8 +2,19 @@
 
 #include <globals.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+char *GetWinErrorA();
+WCHAR *GetWinErrorW();
+
 void FatalErrorA(char *format, ...);
 void FatalErrorW(WCHAR *format, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #define FILENAME (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 
@@ -11,8 +22,10 @@ void FatalErrorW(WCHAR *format, ...);
 #define ASSERT(cnd)\
 	do {\
 		if (!(cnd)){\
-			OutputDebugStringA("Assert failed:\n");\
+			OutputDebugStringA("\nAssert failed:\n");\
 			OutputDebugStringA(#cnd);\
+			OutputDebugStringA("\nLast Windows error:\n");\
+			OutputDebugStringA(GetWinErrorA());\
 			OutputDebugStringA("\n");\
 			__debugbreak();\
 			exit(1);\
@@ -22,7 +35,7 @@ void FatalErrorW(WCHAR *format, ...);
 #define ASSERT(cnd)\
 	do {\
 		if (!(cnd)){\
-			FatalErrorA("Assert failed:\nFile: %s\nLine: %d\nCondition: %s",FILENAME,__LINE__,#cnd);\
+			FatalErrorA("Assert failed:\nFile: %s\nLine: %d\nCondition: %s\nLast Windows error: %s",FILENAME,__LINE__,#cnd,GetWinErrorA());\
 			exit(1);\
 		}\
 	} while (0)

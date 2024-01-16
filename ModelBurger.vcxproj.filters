@@ -30,6 +30,9 @@
     <ClCompile Include="src\globals.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\dwritewrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\res.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dwritewrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
