@@ -111,7 +111,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 
 			DwriteBegin();
 
-			DwriteDrawText(L"Bruh",0,0);
+			RECT cr;
+			GetClientRect(hwnd,&cr);
+			RECT r = {
+				50,50,
+				80,70
+			};
+			DwriteDrawText(L"Bruh",&r);
 
 			DwriteEnd();
 

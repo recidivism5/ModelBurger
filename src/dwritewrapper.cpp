@@ -66,10 +66,7 @@ extern "C" {
 		d2dRenderTarget->EndDraw(0,0);
 	}
 
-	void DwriteDrawText(WCHAR *str, int x, int y){
-		RECT cr;
-		GetClientRect(gwnd,&cr);
-
+	void DwriteDrawText(WCHAR *str, RECT *r){
 		ID2D1SolidColorBrush *brush = 0;
 		ASSERT(SUCCEEDED(d2dRenderTarget->CreateSolidColorBrush(D2D1::ColorF(1.0f,1.0f,1.0f,1.0f),&brush)));
 
@@ -77,7 +74,7 @@ extern "C" {
 			str,
 			(UINT32)wcslen(str),
 			dwTextFormat,
-			D2D1::RectF((float)cr.left,(float)cr.top,(float)cr.right,(float)cr.bottom),
+			D2D1::RectF((float)r->left,(float)r->top,(float)r->right,(float)r->bottom),
 			brush,
 			D2D1_DRAW_TEXT_OPTIONS_NONE,
 			DWRITE_MEASURING_MODE_NATURAL

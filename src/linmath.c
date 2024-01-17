@@ -223,16 +223,21 @@ void mat4_copy(mat4 dst, mat4 src){
 }
 
 void mat4_mul(mat4 a, mat4 b, mat4 dst){
+	mat4 ac, bc;
+	mat4_copy(ac,a);
+	mat4_copy(bc,b);
 	for (int i = 0; i < 4; i++){
 		for (int j = 0; j < 4; j++){
-			dst[i][j] = a[0][j]*b[i][0] + a[1][j]*b[i][1] + a[2][j]*b[i][2] + a[3][j]*b[i][3];
+			dst[i][j] = ac[0][j]*bc[i][0] + ac[1][j]*bc[i][1] + ac[2][j]*bc[i][2] + ac[3][j]*bc[i][3];
 		}
 	}
 }
 
 void mat4_mul_vec4(mat4 m, vec4 v, vec4 dst){
+	vec4 vc;
+	vec4_copy(vc,v);
 	for (int i = 0; i < 4; i++){
-		dst[i] = m[0][i]*v[0] + m[1][i]*v[1] + m[2][i]*v[2] + m[3][i]*v[3];
+		dst[i] = m[0][i]*vc[0] + m[1][i]*vc[1] + m[2][i]*vc[2] + m[3][i]*vc[3];
 	}
 }
 

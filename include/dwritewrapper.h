@@ -11,7 +11,7 @@ void DwriteConnectTexture(ID3D11Texture2D *texture);
 void DwriteReleaseTexture();
 void DwriteBegin();
 void DwriteEnd();
-void DwriteDrawText(WCHAR *str, int x, int y);
+void DwriteDrawText(WCHAR *str, RECT *r);
 
 #ifdef __cplusplus
 }

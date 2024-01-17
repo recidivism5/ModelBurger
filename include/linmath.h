@@ -1,5 +1,9 @@
 #pragma once
 
+//credit to cglm and Microsoft C# math library for some of the functions, they've been modified a bit.
+//https://github.com/recp/cglm
+//https://github.com/microsoft/referencesource/blob/master/System.Numerics/System/Numerics/Quaternion.cs
+
 #define LERP(a,b,t) ((a) + (t)*((b)-(a)))
 
 typedef int ivec2[2];
